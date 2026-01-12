@@ -9,7 +9,7 @@ export const initModules = () => {
   const isPolicyPage = document.body?.dataset.page === "policies";
   if (!isPolicyPage) return;
 
-  const policyCards = Array.from(document.querySelectorAll(".policy-module-card"));
+  const policyCards = Array.from(document.querySelectorAll(".policy-tile"));
 
   policyCards.forEach((card) => {
     card.addEventListener("click", (event) => {
@@ -66,30 +66,12 @@ const openDocumentViewer = ({ url, name }) => {
   const frame = modal.querySelector(".viewer-frame");
   const title = modal.querySelector(".viewer-title");
   const fallback = modal.querySelector(".viewer-fallback");
-  const loader = modal.querySelector(".viewer-loader");
   const download = modal.querySelector("[data-viewer-download]");
 
   title.textContent = name || "Document preview";
   fallback.textContent = "";
-  frame.style.opacity = "0";
-  loader.classList.add("is-visible");
-  frame.onload = () => {
-    setTimeout(() => {
-      loader.classList.remove("is-visible");
-      frame.style.opacity = "1";
-    }, 200);
-  };
-  if (isPdf) {
-    loadPdfIntoFrame({ frame, loader, url });
-  } else {
-    frame.src = viewerUrl;
-  }
-  setTimeout(() => {
-    if (loader.classList.contains("is-visible")) {
-      loader.classList.remove("is-visible");
-      frame.style.opacity = "1";
-    }
-  }, 3000);
+  frame.style.opacity = "1";
+  frame.src = viewerUrl;
   if (download) {
     download.href = url;
     download.setAttribute("download", name || "document");
@@ -118,10 +100,6 @@ const ensureViewerModal = () => {
       </div>
       <div class="viewer-body">
         <iframe title="Document preview" class="viewer-frame"></iframe>
-        <div class="viewer-loader" aria-hidden="true">
-          <div class="viewer-spinner"></div>
-          <span>Loading preview…</span>
-        </div>
         <div class="viewer-fallback"></div>
       </div>
     </div>
@@ -130,10 +108,8 @@ const ensureViewerModal = () => {
 
   const close = () => {
     const frame = modal.querySelector(".viewer-frame");
-    const loader = modal.querySelector(".viewer-loader");
     frame.src = "";
-    loader.classList.remove("is-visible");
-    frame.style.opacity = "0";
+    frame.style.opacity = "1";
     modal.classList.remove("is-visible");
   };
 
@@ -149,29 +125,6 @@ const ensureViewerModal = () => {
   });
 
   return modal;
-};
-
-const loadPdfIntoFrame = async ({ frame, loader, url }) => {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error("Failed to load PDF.");
-    }
-    const blob = await response.blob();
-    const blobUrl = URL.createObjectURL(blob);
-    frame.src = blobUrl;
-    frame.onload = () => {
-      setTimeout(() => {
-        loader.classList.remove("is-visible");
-        frame.style.opacity = "1";
-        URL.revokeObjectURL(blobUrl);
-      }, 200);
-    };
-  } catch (error) {
-    console.error("PDF load failed:", error);
-    loader.classList.remove("is-visible");
-    frame.style.opacity = "1";
-  }
 };
 
 const showToast = (message, variant = "info") => {

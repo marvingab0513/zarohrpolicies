@@ -15,17 +15,8 @@ const buildPolicyRail = (modules) => {
   const moduleItems = modules
     .map((module) => {
       const policies = module.policies || [];
-      const policyItems = policies
-        .map(
-          (policy) =>
-            `<li class="policy-item" data-policy-id="${policy.id}"><span>${escapeHtml(
-              policy.name
-            )}</span></li>`
-        )
-        .join("");
-
       return `
-        <li class="policy-module-card" data-module="${module.id}" data-link="#">
+        <li class="policy-module-card reveal" data-module="${module.id}" data-link="#">
           <button class="rail-item" type="button">
             <span class="rail-title">${escapeHtml(module.name)}</span>
             <span class="rail-meta">${policies.length} ${policies.length === 1 ? "policy" : "policies"}</span>
@@ -36,7 +27,14 @@ const buildPolicyRail = (modules) => {
               <p>${escapeHtml(module.description)}</p>
             </div>
             <ul class="module-list">
-              ${policyItems}
+              ${policies
+                .map(
+                  (policy) =>
+                    `<li class="policy-item" data-policy-id="${policy.id}"><span>${escapeHtml(
+                      policy.name
+                    )}</span></li>`
+                )
+                .join("")}
             </ul>
           </div>
         </li>

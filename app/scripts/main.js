@@ -89,8 +89,8 @@ const bootstrap = async () => {
   initState();
   initHeader();
   initAuth();
-  initReveal();
   initPolicyRender();
+  initReveal();
   initModules();
   initAdmin();
 };
