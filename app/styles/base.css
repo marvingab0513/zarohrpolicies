@@ -1,0 +1,142 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+@import url("https://fonts.cdnfonts.com/css/satoshi");
+
+:root {
+  color-scheme: only light;
+  --ink: #1c2438;
+  --ink-muted: rgba(28, 36, 56, 0.7);
+  --accent: #3f68ff;
+  --accent-soft: rgba(63, 104, 255, 0.12);
+  --brand-yellow: #f0c24d;
+  --outline: rgba(28, 36, 56, 0.12);
+  --panel: rgba(255, 255, 255, 0.9);
+  --panel-strong: rgba(248, 249, 253, 0.98);
+  --shadow: 0 24px 48px rgba(18, 22, 36, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 120px;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", "Segoe UI", sans-serif;
+  font-weight: 400;
+  color: var(--ink);
+  background: radial-gradient(900px 520px at 15% 0%, rgba(63, 104, 255, 0.12), transparent 65%),
+    radial-gradient(800px 420px at 85% 10%, rgba(54, 162, 190, 0.12), transparent 70%),
+    linear-gradient(180deg, #f5f6fa 0%, #eef1f7 55%, #f9fafc 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 140px;
+  padding-bottom: 140px;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Satoshi", "Avenir Next", "Segoe UI", sans-serif;
+  font-weight: 600;
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(2.8rem, 5vw, 4.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: clamp(2rem, 3.8vw, 3.2rem);
+  letter-spacing: -0.015em;
+}
+
+h3 {
+  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+}
+
+p {
+  margin: 0;
+}
+
+.eyebrow {
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  color: var(--ink-muted);
+}
+
+.lead {
+  color: var(--ink-muted);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  max-width: 620px;
+}
+
+.footer {
+  padding: 30px 8vw 50px;
+  color: var(--ink-muted);
+  display: grid;
+  gap: 16px;
+}
+
+.trust-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.trust-strip span {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(63, 104, 255, 0.08);
+  border: 1px solid rgba(63, 104, 255, 0.16);
+}
+
+@media (max-width: 720px) {
+  main {
+    gap: 110px;
+  }
+}
+
+.toast-container {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.toast {
+  background: rgba(15, 23, 42, 0.92);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  letter-spacing: 0.01em;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.2);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.toast--error {
+  background: rgba(185, 28, 28, 0.92);
+}
+
+.toast--hide {
+  opacity: 0;
+  transform: translateY(6px);
+}

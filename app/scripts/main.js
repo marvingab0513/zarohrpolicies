@@ -1,0 +1,98 @@
+import { initAuth } from "./auth.js";
+import { initHeader } from "./header.js";
+import { initModules } from "./modules.js";
+import { initPolicyRender } from "./policy-render.js";
+import { initReveal } from "./reveal.js";
+import { initState } from "./state.js";
+import { initAdmin } from "./admin.js";
+
+const loadComponents = async () => {
+  const includes = Array.from(document.querySelectorAll("[data-include]"));
+  if (!includes.length) return;
+
+  await Promise.all(
+    includes.map(async (element) => {
+      const response = await fetch(element.dataset.include);
+      const html = await response.text();
+      element.outerHTML = html;
+    })
+  );
+};
+
+const hydrateHeader = (page) => {
+  const headerLinks = document.querySelector('[data-slot="header-links"]');
+  const headerCtas = document.querySelector('[data-slot="header-ctas"]');
+  if (!headerLinks || !headerCtas) return;
+
+  if (page === "policies") {
+    headerLinks.innerHTML = `
+      <a class="link" href="#modules">Modules</a>
+      <a class="link" href="#support">Support</a>
+    `;
+    headerCtas.innerHTML = `<button class="btn ghost" id="logout">Logout</button>`;
+    return;
+  }
+
+  if (page === "policy-admin") {
+    headerLinks.innerHTML = `
+      <a class="link" href="policies.html">Modules</a>
+      <a class="link" href="#support">Support</a>
+    `;
+    headerCtas.innerHTML = `<button class="btn ghost" id="logout">Logout</button>`;
+    return;
+  }
+
+  headerLinks.innerHTML = `
+    <a class="link" href="#how">How it works</a>
+    <a class="link" href="#login">Support</a>
+  `;
+  headerCtas.innerHTML = `
+    <button class="btn ghost" data-scroll="login">Employee Login</button>
+    <button class="btn primary" data-scroll="login">Download Handbook</button>
+  `;
+};
+
+const hydrateFooter = (page) => {
+  const footer = document.querySelector(".footer");
+  if (!footer) return;
+
+  const trustStrip = footer.querySelector('[data-slot="trust-strip"]');
+  const footerText = footer.querySelector('[data-slot="footer-text"]');
+  if (!trustStrip || !footerText) return;
+
+  if (page === "policies" || page === "policy-admin") {
+    footer.id = "support";
+    trustStrip.innerHTML = `
+      <span>Compliance support</span>
+      <span>Security controls</span>
+      <span>Access logging</span>
+    `;
+    footerText.textContent = "Need help? Contact HR support for access and policy guidance.";
+    return;
+  }
+
+  footer.removeAttribute("id");
+  trustStrip.innerHTML = `
+    <span>GDPR-ready</span>
+    <span>SOC 2 aligned</span>
+    <span>ISO 27001 practices</span>
+    <span>Secure access logs</span>
+  `;
+  footerText.innerHTML = "ZaRoHR HR Policy Portal &mdash; empowering compliant teams.";
+};
+
+const bootstrap = async () => {
+  await loadComponents();
+  const page = document.body?.dataset.page || "landing";
+  hydrateHeader(page);
+  hydrateFooter(page);
+  initState();
+  initHeader();
+  initAuth();
+  initReveal();
+  initPolicyRender();
+  initModules();
+  initAdmin();
+};
+
+bootstrap();

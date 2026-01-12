@@ -1,0 +1,193 @@
+import { listPolicyDocuments } from "../lib/policy-upload.js";
+
+export const initModules = () => {
+  const moduleCards = document.querySelectorAll(".module-card");
+  moduleCards.forEach((card, index) => {
+    card.style.setProperty("--delay", `${index * 120}ms`);
+  });
+
+  const isPolicyPage = document.body?.dataset.page === "policies";
+  if (!isPolicyPage) return;
+
+  const policyCards = Array.from(document.querySelectorAll(".policy-module-card"));
+
+  policyCards.forEach((card) => {
+    card.addEventListener("click", (event) => {
+      if (event.target.closest(".module-list")) return;
+      const link = card.dataset.link;
+      if (link && link !== "#") {
+        window.location.href = link;
+      }
+    });
+  });
+
+  const policyItems = Array.from(document.querySelectorAll(".policy-item"));
+  policyItems.forEach((item) => {
+    item.addEventListener("dblclick", async (event) => {
+      event.stopPropagation();
+      const policyId = item.dataset.policyId;
+      if (!policyId) return;
+      await previewLatestDocument({ policyId });
+    });
+  });
+};
+
+const previewLatestDocument = async ({ policyId }) => {
+  try {
+    const files = await listPolicyDocuments({ policyId });
+    if (!files.length) {
+      showToast("No files uploaded for this policy.", "info");
+      return;
+    }
+    const latest = files[0];
+    const name = latest.file_path ? latest.file_path.split("/").pop() : "Document preview";
+    openDocumentViewer({ url: latest.url, name });
+  } catch (error) {
+    console.error("Preview failed:", error);
+    showToast("Unable to open document preview.", "error");
+  }
+};
+
+const openDocumentViewer = ({ url, name }) => {
+  if (!url) {
+    showToast("Preview not available for this file.", "error");
+    return;
+  }
+  const extension = String(name || "").split(".").pop()?.toLowerCase();
+  const isPdf = extension === "pdf";
+  const isDoc = extension === "doc" || extension === "docx";
+  let viewerUrl = url;
+
+  if (isDoc) {
+    viewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(url)}`;
+  }
+
+  const modal = ensureViewerModal();
+  const frame = modal.querySelector(".viewer-frame");
+  const title = modal.querySelector(".viewer-title");
+  const fallback = modal.querySelector(".viewer-fallback");
+  const loader = modal.querySelector(".viewer-loader");
+  const download = modal.querySelector("[data-viewer-download]");
+
+  title.textContent = name || "Document preview";
+  fallback.textContent = "";
+  frame.style.opacity = "0";
+  loader.classList.add("is-visible");
+  frame.onload = () => {
+    setTimeout(() => {
+      loader.classList.remove("is-visible");
+      frame.style.opacity = "1";
+    }, 200);
+  };
+  if (isPdf) {
+    loadPdfIntoFrame({ frame, loader, url });
+  } else {
+    frame.src = viewerUrl;
+  }
+  setTimeout(() => {
+    if (loader.classList.contains("is-visible")) {
+      loader.classList.remove("is-visible");
+      frame.style.opacity = "1";
+    }
+  }, 3000);
+  if (download) {
+    download.href = url;
+    download.setAttribute("download", name || "document");
+  }
+  modal.classList.add("is-visible");
+
+  if (!isPdf && !isDoc) {
+    fallback.textContent = "Preview not available for this file type.";
+  }
+};
+
+const ensureViewerModal = () => {
+  let modal = document.querySelector(".viewer-backdrop");
+  if (modal) return modal;
+
+  modal = document.createElement("div");
+  modal.className = "viewer-backdrop";
+  modal.innerHTML = `
+    <div class="viewer" role="dialog" aria-modal="true">
+      <div class="viewer-head">
+        <span class="viewer-title"></span>
+        <div class="viewer-actions">
+          <a class="viewer-btn" data-viewer-download target="_blank" rel="noopener">Download</a>
+          <button class="viewer-btn" type="button" data-viewer-close>Close</button>
+        </div>
+      </div>
+      <div class="viewer-body">
+        <iframe title="Document preview" class="viewer-frame"></iframe>
+        <div class="viewer-loader" aria-hidden="true">
+          <div class="viewer-spinner"></div>
+          <span>Loading preview…</span>
+        </div>
+        <div class="viewer-fallback"></div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  const close = () => {
+    const frame = modal.querySelector(".viewer-frame");
+    const loader = modal.querySelector(".viewer-loader");
+    frame.src = "";
+    loader.classList.remove("is-visible");
+    frame.style.opacity = "0";
+    modal.classList.remove("is-visible");
+  };
+
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) close();
+    if (event.target.closest("[data-viewer-close]")) close();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && modal.classList.contains("is-visible")) {
+      close();
+    }
+  });
+
+  return modal;
+};
+
+const loadPdfIntoFrame = async ({ frame, loader, url }) => {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error("Failed to load PDF.");
+    }
+    const blob = await response.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    frame.src = blobUrl;
+    frame.onload = () => {
+      setTimeout(() => {
+        loader.classList.remove("is-visible");
+        frame.style.opacity = "1";
+        URL.revokeObjectURL(blobUrl);
+      }, 200);
+    };
+  } catch (error) {
+    console.error("PDF load failed:", error);
+    loader.classList.remove("is-visible");
+    frame.style.opacity = "1";
+  }
+};
+
+const showToast = (message, variant = "info") => {
+  if (!message) return;
+  let container = document.querySelector(".toast-container");
+  if (!container) {
+    container = document.createElement("div");
+    container.className = "toast-container";
+    document.body.appendChild(container);
+  }
+  const toast = document.createElement("div");
+  toast.className = `toast toast--${variant}`;
+  toast.textContent = message;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.add("toast--hide");
+    setTimeout(() => toast.remove(), 300);
+  }, 2400);
+};

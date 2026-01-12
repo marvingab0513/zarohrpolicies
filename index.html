@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ZaRoHR | HR Policy Portal</title>
+    <link rel="stylesheet" href="app/styles/base.css" />
+    <link rel="stylesheet" href="app/styles/header.css" />
+    <link rel="stylesheet" href="app/styles/buttons.css" />
+    <link rel="stylesheet" href="app/styles/hero.css" />
+    <link rel="stylesheet" href="app/styles/dashboard.css" />
+    <link rel="stylesheet" href="app/styles/modules.css" />
+    <link rel="stylesheet" href="app/styles/animations.css" />
+  </head>
+  <body data-page="landing">
+    <div data-include="app/components/header.html"></div>
+
+    <main>
+      <div data-include="app/components/hero.html"></div>
+
+      <section class="metrics">
+        <div class="metric reveal">
+          <span class="metric-number" data-count="120">0</span>
+          <span class="metric-label">Policies tracked</span>
+        </div>
+        <div class="metric reveal">
+          <span class="metric-number" data-count="98">0</span>
+          <span class="metric-label">Compliance coverage</span>
+        </div>
+        <div class="metric reveal">
+          <span class="metric-number" data-count="24">0</span>
+          <span class="metric-label">Hour access</span>
+        </div>
+        <div class="metric reveal">
+          <span class="metric-number" data-count="7">0</span>
+          <span class="metric-label">Core modules</span>
+        </div>
+      </section>
+
+      <section class="how" id="how">
+        <div class="section-title reveal">
+          <p class="eyebrow">HOW IT WORKS</p>
+          <h2>Built for calm, continuous compliance.</h2>
+        </div>
+        <div class="how-grid">
+          <article class="how-card reveal">
+            <h3>1. Centralize</h3>
+            <p>Bring every HR and compliance policy into one structured hub.</p>
+          </article>
+          <article class="how-card reveal">
+            <h3>2. Communicate</h3>
+            <p>Publish updates instantly with visibility across departments.</p>
+          </article>
+          <article class="how-card reveal">
+            <h3>3. Assure</h3>
+            <p>Track acknowledgment and stay prepared for audits.</p>
+          </article>
+        </div>
+      </section>
+
+      <div data-include="app/components/login.html"></div>
+    </main>
+
+    <div data-include="app/components/footer.html"></div>
+
+    <script type="module" src="app/scripts/main.js"></script>
+  </body>
+</html>
