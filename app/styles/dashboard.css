@@ -104,6 +104,7 @@
 .policy-module-card {
   list-style: none;
   position: relative;
+  user-select: none;
 }
 
 .rail-item {
@@ -117,6 +118,9 @@
   text-align: left;
   font-family: inherit;
   cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
   box-shadow: 0 10px 24px rgba(18, 22, 36, 0.08);
   transition: transform 220ms ease, box-shadow 220ms ease, border 220ms ease, background 220ms ease;
 }
@@ -189,6 +193,7 @@
   max-height: 260px;
   overflow-y: auto;
   color: rgba(28, 36, 56, 0.85);
+  user-select: none;
 }
 
 .module-list li {
@@ -200,6 +205,7 @@
   border-radius: 12px;
   border: 1px solid transparent;
   background: rgba(248, 250, 255, 0.9);
+  user-select: none;
 }
 
 .module-list li span {
@@ -422,4 +428,10 @@
   .dashboard-grid.rail-layout {
     justify-content: center;
   }
+}
+.policy-rail,
+.policy-rail * {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }

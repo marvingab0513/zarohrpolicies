@@ -21,6 +21,15 @@ export const initModules = () => {
     });
   });
 
+  const policyRail = document.querySelector(".policy-rail");
+  if (policyRail) {
+    policyRail.addEventListener("selectstart", (event) => event.preventDefault());
+    policyRail.addEventListener("dblclick", (event) => event.preventDefault());
+    policyRail.addEventListener("mousedown", (event) => {
+      if (event.detail > 1) event.preventDefault();
+    });
+  }
+
   const policyItems = Array.from(document.querySelectorAll(".policy-item"));
   policyItems.forEach((item) => {
     item.addEventListener("dblclick", async (event) => {
