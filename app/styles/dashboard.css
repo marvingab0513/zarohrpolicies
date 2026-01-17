@@ -25,6 +25,7 @@
   font-size: 0.9rem;
   box-shadow: 0 10px 24px rgba(18, 22, 36, 0.08);
   transition: transform 200ms ease, box-shadow 200ms ease, border 200ms ease;
+  align-self: flex-start;
 }
 
 .add-policy-btn:hover {
@@ -48,8 +49,21 @@
 
 .dashboard-copy {
   display: grid;
-  gap: 12px;
+  gap: 8px;
   max-width: 640px;
+}
+
+.policy-kicker {
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(28, 36, 56, 0.55);
+}
+
+.policy-total {
+  font-size: 0.95rem;
+  color: rgba(28, 36, 56, 0.7);
+  font-weight: 600;
 }
 
 .policy-dashboard .dashboard-head h1 {
@@ -63,15 +77,16 @@
 }
 
 .policy-rail {
-  background: rgba(255, 255, 255, 0.92);
+  background: transparent;
   border: 1px solid rgba(28, 36, 56, 0.12);
   border-radius: 26px;
   padding: 20px;
   box-shadow: 0 22px 44px rgba(18, 22, 36, 0.1);
-  max-width: 520px;
+  max-width: 1060px;
   width: 100%;
   position: sticky;
   top: 120px;
+  margin: 0 auto;
 }
 
 .rail-header {
@@ -96,24 +111,33 @@
 .rail-list {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0 auto;
   display: grid;
-  gap: 12px;
+  grid-template-columns: repeat(3, minmax(180px, 1fr));
+  gap: 22px;
+  align-items: stretch;
+  justify-items: stretch;
+  max-width: 940px;
 }
 
 .policy-module-card {
   list-style: none;
   position: relative;
   user-select: none;
+  height: 100%;
+  z-index: 1;
 }
 
 .rail-item {
   width: 100%;
   border: 1px solid transparent;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.92);
   border-radius: 18px;
   padding: 14px 16px;
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
   gap: 6px;
   text-align: left;
   font-family: inherit;
@@ -121,18 +145,43 @@
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
+  height: 100%;
+  min-height: 200px;
   box-shadow: 0 10px 24px rgba(18, 22, 36, 0.08);
   transition: transform 220ms ease, box-shadow 220ms ease, border 220ms ease, background 220ms ease;
+  position: relative;
 }
 
 .rail-title {
   font-weight: 600;
   font-size: 1rem;
+  line-height: 1.2;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
 }
 
 .rail-meta {
   font-size: 0.82rem;
   color: var(--ink-muted);
+}
+
+.rail-desc {
+  font-size: 0.82rem;
+  color: rgba(28, 36, 56, 0.75);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.rail-icon {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  opacity: 0.85;
+  align-self: center;
 }
 
 .policy-module-card:hover .rail-item,
@@ -157,7 +206,12 @@
   transform: translateX(-8px) translateY(8px);
   pointer-events: none;
   transition: opacity 220ms ease, transform 220ms ease;
-  z-index: 5;
+  z-index: 60;
+}
+
+.policy-module-card:nth-child(3n) .flyout {
+  left: auto;
+  right: calc(100% + 18px);
 }
 
 .policy-module-card:hover .flyout,
@@ -166,6 +220,12 @@
   transform: translateX(0) translateY(0);
   pointer-events: auto;
 }
+
+.policy-module-card:hover,
+.policy-module-card:focus-within {
+  z-index: 70;
+}
+
 
 .module-top {
   display: grid;
@@ -418,6 +478,10 @@
   .module-list {
     max-height: none;
   }
+
+  .rail-list {
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+  }
 }
 
 @media (max-width: 720px) {
@@ -427,6 +491,10 @@
 
   .dashboard-grid.rail-layout {
     justify-content: center;
+  }
+
+  .rail-list {
+    grid-template-columns: 1fr;
   }
 }
 .policy-rail,

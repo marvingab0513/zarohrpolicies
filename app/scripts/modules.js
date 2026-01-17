@@ -9,7 +9,7 @@ export const initModules = () => {
   const isPolicyPage = document.body?.dataset.page === "policies";
   if (!isPolicyPage) return;
 
-  const policyCards = Array.from(document.querySelectorAll(".policy-tile"));
+  const policyCards = Array.from(document.querySelectorAll(".policy-module-card"));
 
   policyCards.forEach((card) => {
     card.addEventListener("click", (event) => {
