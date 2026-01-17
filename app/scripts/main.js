@@ -5,6 +5,7 @@ import { initPolicyRender } from "./policy-render.js";
 import { initReveal } from "./reveal.js";
 import { initState } from "./state.js";
 import { initAdmin } from "./admin.js";
+import { initThemes } from "./themes.js";
 
 const loadComponents = async () => {
   const includes = Array.from(document.querySelectorAll("[data-include]"));
@@ -26,8 +27,10 @@ const hydrateHeader = (page) => {
 
   if (page === "policies") {
     headerLinks.innerHTML = `
-      <a class="link" href="#modules">Modules</a>
-      <a class="link" href="#support">Support</a>
+      <div class="header-policy">
+        <span class="policy-kicker">Policy command center</span>
+        <span class="policy-total" data-policy-total></span>
+      </div>
     `;
     headerCtas.innerHTML = `<button class="btn ghost" id="logout">Logout</button>`;
     return;
@@ -93,6 +96,7 @@ const bootstrap = async () => {
   initReveal();
   initModules();
   initAdmin();
+  initThemes();
 };
 
 bootstrap();

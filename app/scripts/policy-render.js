@@ -73,7 +73,7 @@ const updatePolicyTotal = (modules) => {
   const label = document.querySelector("[data-policy-total]");
   if (label) {
     const moduleCount = modules.length;
-    label.textContent = `${moduleCount} ${moduleCount === 1 ? "module" : "modules"} · ${total} ${
+    label.textContent = `${moduleCount} ${moduleCount === 1 ? "module" : "modules"} | ${total} ${
       total === 1 ? "policy" : "policies"
     }`;
   }
