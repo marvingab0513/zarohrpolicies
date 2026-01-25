@@ -1,0 +1,50 @@
+<div class="chatbot" data-chatbot>
+  <button class="chatbot-toggle" type="button" aria-expanded="false" aria-controls="chatbot-panel">
+    <span class="chatbot-toggle-icon" aria-hidden="true">
+      <span class="bot-face"></span>
+      <span class="bot-hand"></span>
+    </span>
+    <span class="chatbot-toggle-text">Ask Genie</span>
+  </button>
+  <section class="chatbot-panel" id="chatbot-panel" aria-label="Policy assistant">
+    <header class="chatbot-header">
+      <button class="chatbot-close" type="button" aria-label="Close chat">×</button>
+    </header>
+    <div class="chatbot-messages" role="log" aria-live="polite">
+      <div class="chatbot-message-row bot">
+        <div class="chatbot-avatar" aria-hidden="true">
+          <span class="bot-face"></span>
+          <span class="bot-hand"></span>
+        </div>
+        <div class="chatbot-message bot">Hi! How can I help you?</div>
+      </div>
+    </div>
+    <form class="chatbot-form">
+      <div class="chatbot-brain" aria-hidden="true">
+        <svg viewBox="0 0 64 64" role="presentation">
+          <path
+            class="brain-core"
+            d="M26 18c-6 0-10 4-10 10 0 4 2 7 5 9-2 2-3 4-3 7 0 6 4 10 10 10 4 0 7-2 9-5 2 3 5 5 9 5 6 0 10-4 10-10 0-3-1-5-3-7 3-2 5-5 5-9 0-6-4-10-10-10-4 0-7 2-9 5-2-3-5-5-9-5z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <path
+            class="brain-wire"
+            d="M20 28h8m8 0h8M24 36h16M28 44h8"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+      </div>
+      <textarea class="chatbot-input" rows="2" placeholder="Ask about leave, conduct, benefits..." required></textarea>
+      <button class="chatbot-send" type="submit" aria-label="Send">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 11.5l17-7-6.5 17-2.5-6-8-4z" fill="currentColor"></path>
+        </svg>
+      </button>
+    </form>
+  </section>
+</div>

@@ -34,12 +34,6 @@ const THEMES = [
 const STORAGE_KEY = "zarohr-theme";
 
 export const initThemes = () => {
-  const themeButton = document.querySelector(".theme-btn");
-  if (!themeButton) return;
-
-  const panel = buildThemePanel();
-  document.body.appendChild(panel);
-
   const setTheme = (themeId) => {
     if (themeId === "default") {
       document.body.removeAttribute("data-theme");
@@ -54,7 +48,17 @@ export const initThemes = () => {
 
   const saved = localStorage.getItem(STORAGE_KEY);
   const defaultTheme = "default";
-  setTheme(saved && THEMES.some((theme) => theme.id === saved) ? saved : defaultTheme);
+  const initialTheme = saved && THEMES.some((theme) => theme.id === saved) ? saved : defaultTheme;
+
+  const themeButton = document.querySelector(".theme-btn");
+  if (!themeButton) {
+    setTheme(initialTheme);
+    return;
+  }
+
+  const panel = buildThemePanel();
+  document.body.appendChild(panel);
+  setTheme(initialTheme);
 
   const togglePanel = (force) => {
     const nextState = typeof force === "boolean" ? force : !panel.classList.contains("is-open");

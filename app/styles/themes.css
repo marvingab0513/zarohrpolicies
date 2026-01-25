@@ -9,9 +9,10 @@ body[data-theme="sky"] {
   --panel: rgba(246, 249, 255, 0.94);
   --panel-strong: rgba(238, 244, 255, 0.98);
   --shadow: 0 28px 56px rgba(20, 30, 60, 0.16);
-  background: radial-gradient(900px 520px at 10% 0%, rgba(47, 123, 255, 0.22), transparent 62%),
+  --page-bg: radial-gradient(900px 520px at 10% 0%, rgba(47, 123, 255, 0.22), transparent 62%),
     radial-gradient(800px 420px at 90% 12%, rgba(80, 192, 255, 0.2), transparent 68%),
     linear-gradient(180deg, #e9f2ff 0%, #e1ecff 55%, #f2f7ff 100%);
+  background: var(--page-bg);
 }
 
 body[data-theme="sand"] {
@@ -25,9 +26,10 @@ body[data-theme="sand"] {
   --panel: rgba(255, 252, 247, 0.92);
   --panel-strong: rgba(255, 249, 242, 0.98);
   --shadow: 0 22px 46px rgba(34, 24, 12, 0.12);
-  background: radial-gradient(900px 520px at 20% 0%, rgba(200, 116, 47, 0.16), transparent 65%),
+  --page-bg: radial-gradient(900px 520px at 20% 0%, rgba(200, 116, 47, 0.16), transparent 65%),
     radial-gradient(800px 420px at 85% 10%, rgba(246, 200, 137, 0.18), transparent 70%),
     linear-gradient(180deg, #fbf4e8 0%, #f7efe0 55%, #fdf9f2 100%);
+  background: var(--page-bg);
 }
 
 body[data-theme="mint"] {
@@ -41,9 +43,10 @@ body[data-theme="mint"] {
   --panel: rgba(247, 255, 252, 0.92);
   --panel-strong: rgba(243, 253, 249, 0.98);
   --shadow: 0 22px 46px rgba(14, 28, 23, 0.12);
-  background: radial-gradient(900px 520px at 20% 0%, rgba(31, 143, 107, 0.16), transparent 65%),
+  --page-bg: radial-gradient(900px 520px at 20% 0%, rgba(31, 143, 107, 0.16), transparent 65%),
     radial-gradient(820px 440px at 85% 10%, rgba(120, 210, 190, 0.2), transparent 70%),
     linear-gradient(180deg, #f2fbf7 0%, #eaf6f2 55%, #f7fcfa 100%);
+  background: var(--page-bg);
 }
 
 body[data-theme="midnight"] {
@@ -57,9 +60,10 @@ body[data-theme="midnight"] {
   --panel: rgba(18, 24, 40, 0.92);
   --panel-strong: rgba(22, 28, 46, 0.98);
   --shadow: 0 24px 48px rgba(4, 8, 18, 0.45);
-  background: radial-gradient(900px 520px at 15% 0%, rgba(81, 100, 255, 0.22), transparent 65%),
+  --page-bg: radial-gradient(900px 520px at 15% 0%, rgba(81, 100, 255, 0.22), transparent 65%),
     radial-gradient(800px 420px at 85% 10%, rgba(54, 162, 190, 0.2), transparent 70%),
     linear-gradient(180deg, #0a0f1f 0%, #0b1324 55%, #0f172a 100%);
+  background: var(--page-bg);
 }
 
 body[data-theme="carbon"] {
@@ -73,7 +77,8 @@ body[data-theme="carbon"] {
   --panel: rgba(28, 31, 38, 0.94);
   --panel-strong: rgba(36, 39, 46, 0.98);
   --shadow: 0 24px 48px rgba(5, 6, 9, 0.48);
-  background: radial-gradient(900px 520px at 15% 0%, rgba(240, 138, 75, 0.2), transparent 65%),
+  --page-bg: radial-gradient(900px 520px at 15% 0%, rgba(240, 138, 75, 0.2), transparent 65%),
     radial-gradient(780px 420px at 85% 10%, rgba(111, 139, 255, 0.2), transparent 70%),
     linear-gradient(180deg, #0b0c10 0%, #0f1117 55%, #141821 100%);
+  background: var(--page-bg);
 }

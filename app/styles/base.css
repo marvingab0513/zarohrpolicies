@@ -12,6 +12,9 @@
   --panel: rgba(255, 255, 255, 0.9);
   --panel-strong: rgba(248, 249, 253, 0.98);
   --shadow: 0 24px 48px rgba(18, 22, 36, 0.12);
+  --page-bg: radial-gradient(900px 520px at 15% 0%, rgba(63, 104, 255, 0.12), transparent 65%),
+    radial-gradient(800px 420px at 85% 10%, rgba(54, 162, 190, 0.12), transparent 70%),
+    linear-gradient(180deg, #f5f6fa 0%, #eef1f7 55%, #f9fafc 100%);
 }
 
 * {
@@ -28,9 +31,7 @@ body {
   font-family: "Inter", "Segoe UI", sans-serif;
   font-weight: 400;
   color: var(--ink);
-  background: radial-gradient(900px 520px at 15% 0%, rgba(63, 104, 255, 0.12), transparent 65%),
-    radial-gradient(800px 420px at 85% 10%, rgba(54, 162, 190, 0.12), transparent 70%),
-    linear-gradient(180deg, #f5f6fa 0%, #eef1f7 55%, #f9fafc 100%);
+  background: var(--page-bg);
   min-height: 100vh;
   overflow-x: hidden;
 }
@@ -139,4 +140,15 @@ p {
 .toast--hide {
   opacity: 0;
   transform: translateY(6px);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }

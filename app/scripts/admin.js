@@ -7,9 +7,30 @@ export const initAdmin = () => {
 
   const grid = document.querySelector("[data-admin-grid]");
   if (!grid) return;
+  const searchInput = document.querySelector("[data-admin-search]");
+  const searchTrigger = document.querySelector("[data-admin-search-trigger]");
+  const searchWrap = document.querySelector("[data-admin-search-wrap]");
+  const filterButtons = Array.from(document.querySelectorAll("[data-admin-filter]"));
+  let activeFilter = "all";
 
   let policyData = loadPolicyData();
-  renderAdminGrid(grid, policyData);
+  renderAdminGrid(grid, policyData, searchInput?.value || "", activeFilter);
+
+  searchInput?.addEventListener("input", () => {
+    applyPolicyFilter(grid, searchInput.value, activeFilter);
+  });
+  searchTrigger?.addEventListener("click", () => {
+    searchWrap?.classList.toggle("is-open");
+    searchInput?.focus();
+    searchInput?.select();
+  });
+  filterButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      activeFilter = button.dataset.adminFilter || "all";
+      filterButtons.forEach((item) => item.classList.toggle("is-active", item === button));
+      applyPolicyFilter(grid, searchInput?.value || "", activeFilter);
+    });
+  });
 
   grid.addEventListener("click", async (event) => {
     const manageToggle = event.target.closest("[data-action='toggle-manage']");
@@ -31,7 +52,7 @@ export const initAdmin = () => {
       if (!name || !moduleId) return;
       policyData = addPolicy(policyData, moduleId, name);
       savePolicyData(policyData);
-      renderAdminGrid(grid, policyData);
+      renderAdminGrid(grid, policyData, searchInput?.value || "", activeFilter);
       showToast("Policy added.", "info");
       return;
     }
@@ -61,6 +82,7 @@ export const initAdmin = () => {
       const nextData = await confirmPolicyDelete({ item, moduleId: module.dataset.module, policyData, grid });
       if (nextData) {
         policyData = nextData;
+        renderAdminGrid(grid, policyData, searchInput?.value || "", activeFilter);
       }
     }
   });
@@ -84,7 +106,7 @@ export const initAdmin = () => {
 
 };
 
-const renderAdminGrid = (grid, data) => {
+const renderAdminGrid = (grid, data, filterValue = "", filterMode = "all") => {
   grid.innerHTML = data
     .map((module) => {
       const policyItems = module.policies
@@ -139,6 +161,47 @@ const renderAdminGrid = (grid, data) => {
     });
     loadPolicyFiles(item);
   });
+
+  applyPolicyFilter(grid, filterValue, filterMode);
+  updateFilterCounts(grid);
+};
+
+const applyPolicyFilter = (grid, rawQuery, filterMode = "all") => {
+  const query = rawQuery.trim().toLowerCase();
+  let visibleModules = 0;
+
+  grid.querySelectorAll(".admin-module").forEach((module) => {
+    const moduleTitle = module.querySelector("h2")?.textContent?.toLowerCase() || "";
+    const matchesModule = query && moduleTitle.includes(query);
+    const policies = module.querySelectorAll(".admin-policy");
+    let visiblePolicies = 0;
+
+    policies.forEach((item) => {
+      const name = item.querySelector(".policy-name")?.textContent?.toLowerCase() || "";
+      const hasFile = item.classList.contains("has-file");
+      const passesFilter =
+        filterMode === "all" || (filterMode === "present" && hasFile) || (filterMode === "missing" && !hasFile);
+      const matchesSearch = !query || matchesModule || name.includes(query);
+      const show = passesFilter && matchesSearch;
+      item.style.display = show ? "" : "none";
+      if (show) visiblePolicies += 1;
+    });
+
+    const showModule = !query || matchesModule || visiblePolicies > 0;
+    module.style.display = showModule ? "" : "none";
+    if (showModule) visibleModules += 1;
+  });
+
+  let emptyState = grid.querySelector(".admin-empty");
+  if (!emptyState) {
+    emptyState = document.createElement("div");
+    emptyState.className = "admin-empty";
+    emptyState.textContent = "No policies match your search.";
+    grid.appendChild(emptyState);
+  }
+
+  emptyState.style.display = (query || filterMode !== "all") && visibleModules === 0 ? "block" : "none";
+  updateFilterCounts(grid);
 };
 
 const addPolicy = (data, moduleId, name) => {
@@ -265,9 +328,14 @@ const loadPolicyFiles = async (item) => {
     container.innerHTML = "";
     if (!files.length) {
       container.textContent = "No files yet.";
+      item.classList.remove("has-file");
+      updateModuleStatus(item.closest(".admin-module"));
+      applyPolicyFilter(document.querySelector("[data-admin-grid]"), document.querySelector("[data-admin-search]")?.value || "", getActiveFilter());
       return;
     }
 
+    item.classList.add("has-file");
+    updateModuleStatus(item.closest(".admin-module"));
     const label = document.createElement("div");
     label.className = "policy-files-label";
     label.textContent = "Files";
@@ -301,10 +369,37 @@ const loadPolicyFiles = async (item) => {
     });
     container.appendChild(label);
     container.appendChild(list);
+    applyPolicyFilter(document.querySelector("[data-admin-grid]"), document.querySelector("[data-admin-search]")?.value || "", getActiveFilter());
   } catch (error) {
     console.error("Failed to load policy files:", error);
     container.textContent = "Unable to load files.";
   }
+};
+
+const updateModuleStatus = (module) => {
+  if (!module) return;
+  const hasFile = Boolean(module.querySelector(".admin-policy.has-file"));
+  module.classList.toggle("has-files", hasFile);
+};
+
+const getActiveFilter = () =>
+  document.querySelector(".admin-filter.is-active")?.dataset.adminFilter || "all";
+
+const updateFilterCounts = (grid) => {
+  if (!grid) return;
+  const policies = Array.from(grid.querySelectorAll(".admin-policy"));
+  const total = policies.length;
+  const present = policies.filter((item) => item.classList.contains("has-file")).length;
+  const missing = total - present;
+
+  const update = (key, value) => {
+    const node = document.querySelector(`[data-filter-count="${key}"]`);
+    if (node) node.textContent = value;
+  };
+
+  update("all", total);
+  update("present", present);
+  update("missing", missing);
 };
 
 const confirmDialog = ({ title, message, confirmText = "OK", cancelText = "Cancel" }) =>

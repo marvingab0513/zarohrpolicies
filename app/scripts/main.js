@@ -6,6 +6,7 @@ import { initReveal } from "./reveal.js";
 import { initState } from "./state.js";
 import { initAdmin } from "./admin.js";
 import { initThemes } from "./themes.js";
+import { initChatbot } from "./chatbot.js";
 
 const loadComponents = async () => {
   const includes = Array.from(document.querySelectorAll("[data-include]"));
@@ -38,8 +39,24 @@ const hydrateHeader = (page) => {
 
   if (page === "policy-admin") {
     headerLinks.innerHTML = `
-      <a class="link" href="policies.html">Modules</a>
-      <a class="link" href="#support">Support</a>
+      <div class="header-search" data-admin-search-wrap>
+        <button class="header-search-btn" type="button" data-admin-search-trigger aria-label="Search policies">
+          <span class="header-search-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"></circle>
+              <line x1="16.65" y1="16.65" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line>
+            </svg>
+          </span>
+          <span class="sr-only">Search</span>
+        </button>
+        <input
+          class="header-search-input"
+          type="search"
+          placeholder="Search policies"
+          data-admin-search
+          aria-label="Search policies"
+        />
+      </div>
     `;
     headerCtas.innerHTML = `<button class="btn ghost" id="logout">Logout</button>`;
     return;
@@ -97,6 +114,7 @@ const bootstrap = async () => {
   initModules();
   initAdmin();
   initThemes();
+  initChatbot();
 };
 
 bootstrap();

@@ -1,7 +1,11 @@
 .policy-admin {
-  padding: 70px 8vw 120px;
+  padding: 32px 8vw 100px;
   display: grid;
-  gap: 32px;
+  gap: 16px;
+}
+
+body[data-page="policy-admin"] {
+  background: var(--page-bg, transparent);
 }
 
 .admin-head {
@@ -11,6 +15,64 @@
   gap: 16px;
 }
 
+.admin-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.admin-filters {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 999px;
+  border: 1px solid var(--outline);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.admin-filter {
+  border: none;
+  background: transparent;
+  color: var(--ink-muted);
+  font-weight: 600;
+  font-size: 0.82rem;
+  padding: 6px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.filter-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(28, 36, 56, 0.1);
+  color: var(--ink);
+  font-size: 0.72rem;
+  margin-left: 6px;
+}
+
+.admin-filter.is-active .filter-count {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+
+.admin-filter.is-active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.admin-head h1 {
+  font-size: clamp(1.6rem, 2.8vw, 2.6rem);
+  line-height: 1.05;
+}
+
 .admin-back {
   align-self: center;
   text-decoration: none;
@@ -18,9 +80,9 @@
   font-weight: 600;
   padding: 8px 14px;
   border-radius: 999px;
-  border: 1px solid rgba(28, 36, 56, 0.14);
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 10px 24px rgba(18, 22, 36, 0.08);
+  border: 1px solid var(--outline);
+  background: var(--panel);
+  box-shadow: var(--shadow);
 }
 
 .admin-grid {
@@ -28,14 +90,32 @@
   gap: 24px;
 }
 
+.admin-empty {
+  border-radius: 18px;
+  border: 1px dashed var(--outline);
+  background: var(--panel);
+  padding: 18px;
+  text-align: center;
+  color: var(--ink-muted);
+}
+
 .admin-module {
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--panel);
   border-radius: 24px;
-  border: 1px solid rgba(28, 36, 56, 0.1);
-  box-shadow: 0 18px 36px rgba(18, 22, 36, 0.08);
+  border: 1px solid var(--outline);
+  box-shadow: var(--shadow);
   padding: 22px;
   display: grid;
   gap: 16px;
+}
+
+.admin-module.has-files {
+  border-color: var(--accent);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.16);
+}
+
+.admin-policy.has-file .policy-name {
+  color: var(--accent);
 }
 
 .admin-module-head {
@@ -46,7 +126,7 @@
 }
 
 .admin-module-head h2 {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
 }
 
 .admin-add {
@@ -97,7 +177,7 @@
   gap: 12px;
   padding: 12px 14px;
   border-radius: 16px;
-  background: rgba(246, 248, 253, 0.95);
+  background: var(--panel-strong);
   border: 1px solid transparent;
 }
 
@@ -133,8 +213,8 @@
 }
 
 .icon-btn {
-  border: 1px solid rgba(28, 36, 56, 0.12);
-  background: #fff;
+  border: 1px solid var(--outline);
+  background: var(--panel-strong);
   border-radius: 12px;
   padding: 6px 10px;
   font-size: 0.8rem;
@@ -221,7 +301,7 @@
 .dialog-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.4);
+  background: rgba(0, 0, 0, 0.45);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -237,11 +317,11 @@
 }
 
 .dialog {
-  background: #fff;
+  background: var(--panel-strong);
   border-radius: 20px;
   padding: 22px;
   width: min(420px, 90vw);
-  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.2);
+  box-shadow: var(--shadow);
   display: grid;
   gap: 12px;
 }
@@ -281,11 +361,11 @@
 }
 
 .viewer {
-  background: #fff;
+  background: var(--panel-strong);
   border-radius: 18px;
   width: min(960px, 92vw);
   height: min(680px, 88vh);
-  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.22);
+  box-shadow: var(--shadow);
   display: grid;
   grid-template-rows: auto 1fr;
   overflow: hidden;
@@ -296,8 +376,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 14px 18px;
-  border-bottom: 1px solid rgba(28, 36, 56, 0.08);
-  background: rgba(248, 250, 255, 0.9);
+  border-bottom: 1px solid var(--outline);
+  background: var(--panel);
 }
 
 .viewer-title {
@@ -310,8 +390,8 @@
 }
 
 .viewer-btn {
-  border: 1px solid rgba(28, 36, 56, 0.16);
-  background: #fff;
+  border: 1px solid var(--outline);
+  background: var(--panel-strong);
   border-radius: 999px;
   padding: 6px 14px;
   font-size: 0.85rem;
@@ -331,7 +411,7 @@
 .viewer-body {
   position: relative;
   display: grid;
-  background: #f6f7fb;
+  background: var(--panel);
 }
 
 .viewer-frame {
