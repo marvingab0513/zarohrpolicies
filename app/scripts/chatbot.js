@@ -8,6 +8,12 @@ export const initChatbot = () => {
   const form = chatbot.querySelector(".chatbot-form");
   const input = chatbot.querySelector(".chatbot-input");
   const messages = chatbot.querySelector(".chatbot-messages");
+  const logout = document.getElementById("logout");
+  const history = loadChatHistory();
+
+  if (messages) {
+    renderChatHistory(messages, history);
+  }
 
   const setOpen = (isOpen) => {
     chatbot.classList.toggle("is-open", isOpen);
@@ -39,6 +45,8 @@ export const initChatbot = () => {
     const text = input.value.trim();
     if (!text) return;
     appendMessage(messages, text, "user");
+    history.push({ text, variant: "user" });
+    saveChatHistory(history);
     input.value = "";
     const pending = appendMessage(messages, "Thinking...", "bot");
     messages.scrollTop = messages.scrollHeight;
@@ -56,14 +64,24 @@ export const initChatbot = () => {
         return response.json();
       })
       .then((data) => {
-        pending.textContent = data?.answer || "I don't have enough information to answer that.";
+        const answer = data?.answer || "I don't have enough information to answer that.";
+        pending.textContent = answer;
+        history.push({ text: answer, variant: "bot" });
+        saveChatHistory(history);
       })
       .catch((error) => {
-        pending.textContent = error?.message || "Unable to answer right now.";
+        const message = error?.message || "Unable to answer right now.";
+        pending.textContent = message;
+        history.push({ text: message, variant: "bot" });
+        saveChatHistory(history);
       })
       .finally(() => {
         messages.scrollTop = messages.scrollHeight;
       });
+  });
+
+  logout?.addEventListener("click", () => {
+    localStorage.removeItem(CHAT_STORAGE_KEY);
   });
 };
 
@@ -85,4 +103,35 @@ const appendMessage = (container, text, variant) => {
   row.appendChild(message);
   container.appendChild(row);
   return message;
+};
+
+const CHAT_STORAGE_KEY = "policy-chat-history";
+
+const loadChatHistory = () => {
+  try {
+    const stored = localStorage.getItem(CHAT_STORAGE_KEY);
+    const parsed = stored ? JSON.parse(stored) : [];
+    if (Array.isArray(parsed) && parsed.length) {
+      return parsed;
+    }
+  } catch (error) {
+    console.warn("Failed to load chat history:", error);
+  }
+  return [{ text: "Hi! How can I help you?", variant: "bot" }];
+};
+
+const saveChatHistory = (history) => {
+  try {
+    localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(history));
+  } catch (error) {
+    console.warn("Failed to save chat history:", error);
+  }
+};
+
+const renderChatHistory = (container, history) => {
+  container.innerHTML = "";
+  history.forEach((item) => {
+    if (!item?.text || !item?.variant) return;
+    appendMessage(container, item.text, item.variant);
+  });
 };
